@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { TextareaAutoresizeDirective } from '../../directives/textarea-autoresize';
 import { StateService } from '../../services/state/state.service';
 import { AsyncPipe } from '@angular/common'; 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 type OptionState = {
   id: number;
@@ -19,9 +19,9 @@ type OptionsState = OptionState[];
 })
 export class Writer {
   stateService = inject(StateService);
-  currentBackground = this.stateService.currentBackground;
-  currentNoOfOptions = this.stateService.currentNoOfOptions;
-  currentEvent = this.stateService.currentEvent;
+  currentBackground = this.stateService.background$;
+  currentNoOfOptions = this.stateService.noOfOptions$;
+  currentEvent = this.stateService.event$;
   maskPath: BehaviorSubject<string>;
   descHeight: BehaviorSubject<number>;
   optionsState: BehaviorSubject<OptionsState>;
@@ -78,7 +78,7 @@ export class Writer {
 
   onOptionInput(event: Event, id: number) {
     const input = (event.target as HTMLInputElement).value;
-    const currentOptions = this.stateService.currentEvent.value.options;
+    const currentOptions = this.stateService.getCurrentEvent().options;
     currentOptions[id-1] = input;
     this.stateService.updateEventState({ options: currentOptions });
   }

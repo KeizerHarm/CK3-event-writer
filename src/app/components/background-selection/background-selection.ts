@@ -1,7 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { Background, StateService } from '../../services/state/state.service';
-import backgrounds from '../../../assets/backgrounds.json';
-
 
 @Component({
   selector: 'app-background-selection',
@@ -10,7 +8,7 @@ import backgrounds from '../../../assets/backgrounds.json';
 })
 export class BackgroundSelection {
   private stateService = inject(StateService);
-  backgrounds: Background[] = backgrounds;
+  backgrounds: Background[] = this.stateService.allAvailableBackgrounds;
 
   constructor() {
   }

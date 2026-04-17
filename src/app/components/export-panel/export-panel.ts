@@ -32,7 +32,7 @@ export class ExportPanel {
   }
 
   buildExport(): string {
-    const event = this.stateService.currentEvent.value;
+    const event = this.stateService.getCurrentEvent();
     const titleStr = ` ${event.id}.t : "${event.title}"\n`;
     let descStr = event.desc.replace(/\r?\n/g, "\\n");
     descStr = ` ${event.id}.desc : "${descStr}"\n`;
@@ -57,7 +57,7 @@ export class ExportPanel {
 
   private readonly eventIdRegex = new RegExp('[a-zA-Z0-9_]*\\.[0-9]{1,4}$');
   validateEventId() {
-    const eventId = this.stateService.currentEvent.value.id;
+    const eventId = this.stateService.getCurrentEvent().id;
     if (eventId === null || eventId === '') {
       this.errorMessages.push('Event id missing!');
       return;

@@ -11,12 +11,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 })
 export class OptionsPanel implements OnInit {
   private stateService = inject(StateService);  
-  currentNoOfOptions = this.stateService.currentNoOfOptions;
-  noOfOptionsControl = new FormControl<number>(this.currentNoOfOptions.value);
+  noOfOptionsControl = new FormControl<number>(this.stateService.getCurrentNoOfOptions());
   eventIdControl = new FormControl<string>('');
 
   ngOnInit() {
-    this.currentNoOfOptions.subscribe(value => {
+    this.stateService.noOfOptions$.subscribe(value => {
       this.noOfOptionsControl.setValue(value, { emitEvent: false });
     });
 
@@ -24,6 +23,10 @@ export class OptionsPanel implements OnInit {
       if (value !== null) {
         this.stateService.setNoOfOptions(value);
       }
+    });
+    
+    this.stateService.event$.subscribe(value => {
+      this.eventIdControl.setValue(value.id, { emitEvent: false });
     });
 
     this.eventIdControl.valueChanges.subscribe(value => {

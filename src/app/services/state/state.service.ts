@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import backgrounds from '../../../assets/backgrounds.json';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, map, Observable, shareReplay } from 'rxjs';
 
 export interface Background {
   id: number;
@@ -16,59 +16,107 @@ export interface EventState {
   options: string[];
 }
 
+interface State {
+  event: EventState;
+  background: Background;
+  noOfOptions: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class StateService {
-  backgrounds: Background[] = backgrounds;
-  currentEvent: BehaviorSubject<EventState>;
+  allAvailableBackgrounds: Background[] = backgrounds;
 
-  currentBackground: BehaviorSubject<Background>;
-  currentNoOfOptions: BehaviorSubject<number>;
-
+  private state$: BehaviorSubject<State>;
 
   constructor() {
-    this.currentBackground = new BehaviorSubject<Background>(backgrounds[0]);
-    this.currentNoOfOptions = new BehaviorSubject<number>(2);
-    this.currentEvent = new BehaviorSubject<EventState>({
-      id: '',
-      title: '',
-      desc: '',
-      options: [
-        '','','','',''
-      ]
+    this.state$ = new BehaviorSubject<State>({
+      event: {
+        id: '',
+        title: '',
+        desc: '',
+        options: [
+          '','','','',''
+        ]
+      },
+      noOfOptions: 2,
+      background: backgrounds[0]
+    });
+
+    this.background$ = this.state$.pipe(
+      map(state => state.background),
+      distinctUntilChanged(),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+    this.noOfOptions$ = this.state$.pipe(
+      map(state => state.noOfOptions),
+      distinctUntilChanged(),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+    this.event$ = this.state$.pipe(
+      map(state => state.event),
+      distinctUntilChanged(),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
+
+
+    const cache = localStorage.getItem('cache');
+    if (cache) {
+      this.state$.next(JSON.parse(cache));
+    }
+
+    this.state$.subscribe(value => {
+      localStorage.setItem('cache', JSON.stringify(value));
     });
   }
 
-  setBackground(id: number) {
-    const newBg = backgrounds.filter(x => x.id === id)[0];
-    this.currentBackground.next(newBg);
+  event$: Observable<EventState>;
+  getCurrentEvent(): EventState {
+    return this.state$.value.event;
+  }
+  updateEventState(state: Partial<EventState>) {
+    const currentEvent = this.getCurrentEvent();
+    this.state$.next(
+      { ...this.state$.value,
+         event: 
+        {
+          ...currentEvent,
+          ...state
+        }
+      }
+    );
   }
 
-  setNoOfOptions(amount: number) {
-    this.currentNoOfOptions.next(amount);
+  background$: Observable<Background>;
+  getCurrentBackground(): Background {
+    return this.state$.value.background;
   }
-  
-  updateEventState(state: Partial<EventState>) {
-    const event = this.currentEvent.value;
-    this.currentEvent.next(
-      {
-        ...event,
-        ...state
-      }
-    )
+  setBackground(id: number) {
+    const newBg = backgrounds.filter(x => x.id === id)[0];
+    this.state$.next( { ...this.state$.value, background: newBg } );
+  }
+
+  noOfOptions$: Observable<number>;
+  getCurrentNoOfOptions(): number {
+    return this.state$.value.noOfOptions;
+  }
+  setNoOfOptions(amount: number) {
+    this.state$.next( { ...this.state$.value, noOfOptions: amount } );
   }
 
   clearAll() {
-    this.currentBackground.next(backgrounds[0]);
-    this.currentNoOfOptions.next(2);
-    this.currentEvent.next({
-      id: '',
-      title: '',
-      desc: '',
-      options: [
-        '','','','',''
-      ]
+    this.state$.next({
+      background: backgrounds[0],
+      noOfOptions: 2,
+      event: {
+        id: '',
+        title: '',
+        desc: '',
+        options: [
+          '','','','',''
+        ]
+      }
     });
   }
 }
