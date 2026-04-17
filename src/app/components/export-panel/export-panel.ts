@@ -33,6 +33,7 @@ export class ExportPanel {
 
   buildExport(): string {
     const event = this.stateService.getCurrentEvent();
+    const noOfOptions = this.stateService.getCurrentNoOfOptions();
     const titleStr = ` ${event.id}.t : "${event.title}"\n`;
     let descStr = event.desc.replace(/\r?\n/g, "\\n");
     descStr = ` ${event.id}.desc : "${descStr}"\n`;
@@ -40,16 +41,16 @@ export class ExportPanel {
     const opt1Str = ` ${event.id}.a: "${event.options[0]}"\n`;
 
     let exported = titleStr + descStr + opt1Str;
-    if (event.options[1]) {
+    if (noOfOptions > 1) {
       exported += ` ${event.id}.b: "${event.options[1]}"\n`;
     }
-    if (event.options[2]) {
+    if (noOfOptions > 2) {
       exported += ` ${event.id}.c: "${event.options[2]}"\n`;
     }
-    if (event.options[3]) {
+    if (noOfOptions > 3) {
       exported += ` ${event.id}.d: "${event.options[3]}"\n`;
     }
-    if (event.options[4]) {
+    if (noOfOptions > 4) {
       exported += ` ${event.id}.e: "${event.options[4]}"\n`;
     }
     return exported;

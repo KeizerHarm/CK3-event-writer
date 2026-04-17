@@ -1,22 +1,31 @@
-<div class="main-panel">
+<div class="main-panel" >
 	<div class="row" style="height: 30px;">
 		<div class="component-panel" style="width: 1400px;">
 			<app-header/>
 		</div>
 	</div>
-	<div class="row" style="height: 585px;">
-		<div class="component-panel" id="writer-panel" style="width: 1120px;">
-			<app-writer/>
+	<div [style.display]="(tabWriterDisplay | async)">
+		<div class="row" style="height: 585px;">
+			<div class="component-panel" id="writer-panel" style="width: 1120px;">
+				<app-writer/>
+			</div>
+			<div class="component-panel" style="width: 165px;">
+				<app-background-selection/>
+			</div><div class="component-panel" style="width: 200px;">
+				<app-options-panel />
+			</div>
 		</div>
-		<div class="component-panel" style="width: 165px;">
-			<app-background-selection/>
-		</div><div class="component-panel" style="width: 200px;">
-			<app-options-panel />
+		<div class="row" style="height: 200px;">
+			<div class="component-panel" style="width: 650px;">
+				<app-export-panel/>
+			</div>
 		</div>
 	</div>
-	<div class="row" style="height: 200px;">
-		<div class="component-panel" style="width: 650px;">
-			<app-export-panel/>
+	<div [style.display]="(tabCharactersDisplay | async)">
+		<div class="row" style="height: 600px;">
+			<div class="component-panel" style="width: 1400px;">
+				<app-character-storage/>
+			</div>
 		</div>
 	</div>
 </div>

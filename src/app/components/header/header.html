@@ -1,2 +1,11 @@
 <button>Import</button>
 <button (click)="clear()">Clear</button>
+<button 
+	style="margin-left: 20px;"
+	(click)="setTab(Tab.Writer)"
+	[class.down]="(tab$ | async) === Tab.Writer">
+	Event writer</button>
+<button
+	(click)="setTab(Tab.Characters)"
+	[class.down]="(tab$ | async) === Tab.Characters"
+	>Characters</button>

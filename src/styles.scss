@@ -2,6 +2,7 @@ $subpanel-color: #020202;
 $panel-color: #1a1a1a;
 $panel-bg-color: #24272b;
 $font-color: #9B998E;
+$font-highlight-color: #DDD6BF;
 $contrast-color: #5f4f38;
 
 @font-face {
@@ -27,5 +28,10 @@ $contrast-color: #5f4f38;
 button {
   background-color: #64592a;
   padding: 5px 10px;
+  color: $font-highlight-color;
+}
+
+button.down {
   color: white;
+  background-color: rgb(80, 71, 34);
 }

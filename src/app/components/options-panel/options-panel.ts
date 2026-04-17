@@ -10,7 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrl: './options-panel.scss',
 })
 export class OptionsPanel implements OnInit {
-  private stateService = inject(StateService);  
+  private stateService = inject(StateService);
   noOfOptionsControl = new FormControl<number>(this.stateService.getCurrentNoOfOptions());
   eventIdControl = new FormControl<string>('');
 

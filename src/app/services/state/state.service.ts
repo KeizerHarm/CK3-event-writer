@@ -16,10 +16,18 @@ export interface EventState {
   options: string[];
 }
 
-interface State {
+export enum Tab {
+  Writer,
+  Characters
+}
+
+interface PersistentState {
   event: EventState;
   background: Background;
   noOfOptions: number;
+}
+interface VolatileState {
+  tab: Tab;
 }
 
 @Injectable({
@@ -28,10 +36,11 @@ interface State {
 export class StateService {
   allAvailableBackgrounds: Background[] = backgrounds;
 
-  private state$: BehaviorSubject<State>;
+  private persistentState$: BehaviorSubject<PersistentState>;
+  private volatileState$: BehaviorSubject<VolatileState>;
 
   constructor() {
-    this.state$ = new BehaviorSubject<State>({
+    this.persistentState$ = new BehaviorSubject<PersistentState>({
       event: {
         id: '',
         title: '',
@@ -44,17 +53,17 @@ export class StateService {
       background: backgrounds[0]
     });
 
-    this.background$ = this.state$.pipe(
+    this.background$ = this.persistentState$.pipe(
       map(state => state.background),
       distinctUntilChanged(),
       shareReplay({ bufferSize: 1, refCount: true })
     );
-    this.noOfOptions$ = this.state$.pipe(
+    this.noOfOptions$ = this.persistentState$.pipe(
       map(state => state.noOfOptions),
       distinctUntilChanged(),
       shareReplay({ bufferSize: 1, refCount: true })
     );
-    this.event$ = this.state$.pipe(
+    this.event$ = this.persistentState$.pipe(
       map(state => state.event),
       distinctUntilChanged(),
       shareReplay({ bufferSize: 1, refCount: true })
@@ -63,22 +72,31 @@ export class StateService {
 
     const cache = localStorage.getItem('cache');
     if (cache) {
-      this.state$.next(JSON.parse(cache));
+      this.persistentState$.next(JSON.parse(cache));
     }
 
-    this.state$.subscribe(value => {
+    this.persistentState$.subscribe(value => {
       localStorage.setItem('cache', JSON.stringify(value));
     });
+
+    this.volatileState$ = new BehaviorSubject<VolatileState>({
+      tab: Tab.Writer
+    });
+    this.tab$ = this.volatileState$.pipe(
+      map(state => state.tab),
+      distinctUntilChanged(),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
   }
 
   event$: Observable<EventState>;
   getCurrentEvent(): EventState {
-    return this.state$.value.event;
+    return this.persistentState$.value.event;
   }
   updateEventState(state: Partial<EventState>) {
     const currentEvent = this.getCurrentEvent();
-    this.state$.next(
-      { ...this.state$.value,
+    this.persistentState$.next(
+      { ...this.persistentState$.value,
          event: 
         {
           ...currentEvent,
@@ -90,23 +108,31 @@ export class StateService {
 
   background$: Observable<Background>;
   getCurrentBackground(): Background {
-    return this.state$.value.background;
+    return this.persistentState$.value.background;
   }
   setBackground(id: number) {
     const newBg = backgrounds.filter(x => x.id === id)[0];
-    this.state$.next( { ...this.state$.value, background: newBg } );
+    this.persistentState$.next( { ...this.persistentState$.value, background: newBg } );
   }
 
   noOfOptions$: Observable<number>;
   getCurrentNoOfOptions(): number {
-    return this.state$.value.noOfOptions;
+    return this.persistentState$.value.noOfOptions;
   }
   setNoOfOptions(amount: number) {
-    this.state$.next( { ...this.state$.value, noOfOptions: amount } );
+    this.persistentState$.next( { ...this.persistentState$.value, noOfOptions: amount } );
+  }
+
+  tab$: Observable<Tab>;
+  getCurrentTab(): Tab {
+    return this.volatileState$.value.tab;
+  }
+  setTab(tab: Tab) {
+    this.volatileState$.next( { ...this.volatileState$.value, tab } );
   }
 
   clearAll() {
-    this.state$.next({
+    this.persistentState$.next({
       background: backgrounds[0],
       noOfOptions: 2,
       event: {
