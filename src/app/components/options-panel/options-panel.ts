@@ -15,22 +15,24 @@ export class OptionsPanel implements OnInit {
   }
   
   currentNoOfOptions = this.settingsService.currentNoOfOptions;
-  control = new FormControl<number>(this.currentNoOfOptions.value);
-
+  noOfOptionsControl = new FormControl<number>(this.currentNoOfOptions.value);
+  eventIdControl = new FormControl<string>('');
 
   ngOnInit() {
     this.currentNoOfOptions.subscribe(value => {
-      this.control.setValue(value, { emitEvent: false });
+      this.noOfOptionsControl.setValue(value, { emitEvent: false });
     });
 
-    this.control.valueChanges.subscribe(value => {
+    this.noOfOptionsControl.valueChanges.subscribe(value => {
       if (value !== null) {
-        this.selectNoOfOptions(value);
+        this.settingsService.setNoOfOptions(value);
       }
     });
-  }
 
-  selectNoOfOptions(amount: number) {
-    this.settingsService.setNoOfOptions(amount);
+    this.eventIdControl.valueChanges.subscribe(value => {
+      if (value !== null) {
+        this.settingsService.setEventId(value);
+      }
+    })
   }
 }

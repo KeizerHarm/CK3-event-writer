@@ -16,10 +16,12 @@ export class SettingsService {
 
   currentBackground: BehaviorSubject<Background>;
   currentNoOfOptions: BehaviorSubject<number>;
+  eventId: string;
 
   constructor() {
     this.currentBackground = new BehaviorSubject<Background>(backgrounds.filter(x => x.id === 1)[0]);
     this.currentNoOfOptions = new BehaviorSubject<number>(2);
+    this.eventId = '';
   }
 
   setBackground(id: number) {
@@ -29,5 +31,9 @@ export class SettingsService {
 
   setNoOfOptions(amount: number) {
     this.currentNoOfOptions.next(amount);
+  }
+
+  setEventId(id: string) {
+    this.eventId = id;
   }
 }

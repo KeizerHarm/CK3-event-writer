@@ -1,12 +1,17 @@
-<div style="display: flex; padding: 50px; padding-top: 100px; background-color: rgb(59, 18, 18); height: 585px;"> 
-
-	<div style="margin-left: 10px; padding: 5px; height: 100%; width: 1120px; background-color: rgb(88, 29, 29);">
-		<app-writer/>
+<div class="main-panel">
+	<div class="row" style="height: 585px;">
+		<div class="component-panel" style="width: 1120px;">
+			<app-writer/>
+		</div>
+		<div class="component-panel" style="width: 165px;">
+			<app-background-selection/>
+		</div><div class="component-panel" style="width: 200px;">
+			<app-options-panel />
+		</div>
 	</div>
-	<div style="margin-left: 10px; padding: 5px; height: 100%; width: 165px; background-color: rgb(88, 29, 29);">
-		<app-background-selection/>
-	</div>
-	<div style="margin-left: 10px; padding: 5px; height: 100%; width: 200px; background-color: rgb(88, 29, 29);">
-		<app-options-panel />
+	<div class="row" style="height: 200px;">
+		<div class="component-panel" style="width: 650px;">
+			<app-export-panel/>
+		</div>
 	</div>
 </div>

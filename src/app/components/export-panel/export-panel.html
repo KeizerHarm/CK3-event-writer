@@ -1,0 +1,22 @@
+Export state: {{state}}.
+<button (click)="export()">Export!</button>
+<br><br>
+@if (errorMessages.length > 0) {
+	Errors:<br>
+	@for (msg of errorMessages; track $index) {
+		{{msg}}
+	}
+	<br>
+}
+@if (warningMessages.length > 0) {
+	Warnings:<br>
+	@for (msg of warningMessages; track $index) {
+		{{msg}}
+	}
+	<br>
+}
+
+@if (exported.length > 0){
+	Export: <br>
+	<textarea [value]="exported"></textarea>
+}
