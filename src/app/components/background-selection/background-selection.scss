@@ -1,6 +1,10 @@
+@use '../../../styles.scss' as *;
+
 .backgrounds-list {
 	overflow-x: auto;
-	height: calc(100% - 20px);
+	height: calc(100% - 30px);
+	background-color: $subpanel-color;
+	padding: 5px 0px;
 }
 .background-thumbnail {
 	height: 75px;
