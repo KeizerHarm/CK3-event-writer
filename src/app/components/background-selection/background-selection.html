@@ -1,0 +1,8 @@
+Background:
+<div class="backgrounds-list">
+	@for (bg of backgrounds; track bg.id) {
+		<div (click)="selectBackground(bg.id)" class="background-thumbnail-container">
+			<img src="./{{ bg.path }}" alt="{{ bg.name }}" title="{{ bg.name }}" class="background-thumbnail"/>
+		</div>
+	}
+</div>

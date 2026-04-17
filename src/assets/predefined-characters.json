@@ -1,0 +1,33 @@
+[
+	
+	{
+		"id": 1,
+		"givenName": "Haesteinn",
+		"familyName": "of Nantes",
+		"isFemale": false
+	},
+	{
+		"id": 2,
+		"givenName": "Matilda",
+		"familyName": "di Canossa",
+		"isFemale": true
+	},
+	{
+		"id": 3,
+		"givenName": "Yahya",
+		"familyName": "Dhunnuhid",
+		"isFemale": false
+	},
+	{
+		"id": 4,
+		"givenName": "Vratislav",
+		"familyName": "Přemyslid",
+		"isFemale": false
+	},
+	{
+		"id": 5,
+		"givenName": "Robert",
+		"familyName": "de Hauteville",
+		"isFemale": false
+	}
+]

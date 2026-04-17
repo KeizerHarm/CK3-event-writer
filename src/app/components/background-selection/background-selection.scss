@@ -1,0 +1,18 @@
+.backgrounds-list {
+	overflow-x: auto;
+	height: calc(100% - 20px);
+}
+.background-thumbnail {
+	height: 75px;
+	width: 141px;
+	display: flex;
+}
+.background-thumbnail-container {
+	height: 75px;
+	width: 150px;
+	display: flex;
+	justify-content: center;
+}
+.background-thumbnail-container:hover {
+	background-color: #00000055;
+}

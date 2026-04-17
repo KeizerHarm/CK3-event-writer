@@ -1,0 +1,10 @@
+<div>
+	@for (char of characters; track char.id) {
+		<div>
+			<ul>
+				<li>Name: {{ printCharacterName(char) }}</li>
+				<li>Gender: {{ printCharacterGender(char) }}</li>
+			</ul>
+		</div>
+	}
+</div>

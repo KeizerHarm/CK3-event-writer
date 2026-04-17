@@ -1,0 +1,42 @@
+[
+	{
+		"id": 1,
+		"name": "Desert",
+		"path": "assets/backgrounds/desert.png"
+	},
+	{
+		"id": 2,
+		"name": "Temple",
+		"path": "assets/backgrounds/temple.png"
+	},
+	{
+		"id": 3,
+		"name": "Tribal Market",
+		"path": "assets/backgrounds/market_tribal.png"
+	},
+	{
+		"id": 4,
+		"name": "Western Throne Room",
+		"path": "assets/backgrounds/throneroom_west.png"
+	},
+	{
+		"id": 5,
+		"name": "Eastern Throne Room",
+		"path": "assets/backgrounds/throneroom_east.png"
+	},
+	{
+		"id": 6,
+		"name": "Tribal Throne Room",
+		"path": "assets/backgrounds/throneroom_tribal.png"
+	},
+	{
+		"id": 7,
+		"name": "Indian Throne Room",
+		"path": "assets/backgrounds/throneroom_india.png"
+	},
+	{
+		"id": 8,
+		"name": "Mediterranean Throne Room",
+		"path": "assets/backgrounds/throneroom_mediterranean.png"
+	}
+]
