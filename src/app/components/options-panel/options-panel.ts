@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { SettingsService } from '../../services/settings/settings.service';
+import { StateService } from '../../services/state/state.service';
 import { FormControl } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -10,11 +10,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   styleUrl: './options-panel.scss',
 })
 export class OptionsPanel implements OnInit {
-  private settingsService = inject(SettingsService);
-  constructor() {
-  }
-  
-  currentNoOfOptions = this.settingsService.currentNoOfOptions;
+  private stateService = inject(StateService);  
+  currentNoOfOptions = this.stateService.currentNoOfOptions;
   noOfOptionsControl = new FormControl<number>(this.currentNoOfOptions.value);
   eventIdControl = new FormControl<string>('');
 
@@ -25,13 +22,13 @@ export class OptionsPanel implements OnInit {
 
     this.noOfOptionsControl.valueChanges.subscribe(value => {
       if (value !== null) {
-        this.settingsService.setNoOfOptions(value);
+        this.stateService.setNoOfOptions(value);
       }
     });
 
     this.eventIdControl.valueChanges.subscribe(value => {
       if (value !== null) {
-        this.settingsService.setEventId(value);
+        this.stateService.updateEventState({ id: value });
       }
     })
   }

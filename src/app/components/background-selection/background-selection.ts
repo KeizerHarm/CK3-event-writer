@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Background, SettingsService } from '../../services/settings/settings.service';
+import { Background, StateService } from '../../services/state/state.service';
 import backgrounds from '../../../assets/backgrounds.json';
 
 
@@ -9,13 +9,13 @@ import backgrounds from '../../../assets/backgrounds.json';
   styleUrls: ['./background-selection.scss']
 })
 export class BackgroundSelection {
-  private settingsService = inject(SettingsService);
+  private stateService = inject(StateService);
   backgrounds: Background[] = backgrounds;
 
   constructor() {
   }
 
   selectBackground(id: number) {
-    this.settingsService.setBackground(id);
+    this.stateService.setBackground(id);
   }
 }

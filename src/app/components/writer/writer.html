@@ -3,14 +3,29 @@
 	<img src="{{ maskPath | async }}" alt="Mask" class="event-mask"/>
 
 	<div class="title-container">
-		<textarea id="title-textarea" [value]="lipsumShort" rows="1" spellcheck="false"></textarea>
+		<textarea 
+			id="title-textarea" 
+			[value]="(currentEvent | async)?.title" 
+			(input)="onTitleInput($event)" 
+			rows="1" spellcheck="false"></textarea>
 	</div>
 	<div class="desc-container" [style.height.px]="(descHeight | async)" >
-		<textarea id="desc-textarea" [value]="lipsumLong" spellcheck="false" appTextareaAutoresize></textarea>
+		<textarea 
+			id="desc-textarea" 
+			[value]="(currentEvent | async)?.desc"
+			(input)="onDescInput($event)"
+			spellcheck="false" 
+			appTextareaAutoresize></textarea>
 	</div>
 	@for (item of (optionsState | async); track item.id) {
 		<div class="option-container" [style.top.px]="item.height" [style.display]="item.visible ? 'none' : 'block'" >
-			<textarea class="option-textarea" id="option-{{item.id}}" [value]="lipsumShort" rows="1" spellcheck="false"></textarea>
+			<textarea 
+				class="option-textarea" 
+				id="option-{{item.id}}" 
+				[value]="(currentEvent | async)?.options?.at(item.id-1)"
+				(input)="onOptionInput($event, item.id)"
+				rows="1" 
+				spellcheck="false"></textarea>
 		</div>
 	}
 </div>

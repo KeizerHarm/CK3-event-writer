@@ -3,10 +3,11 @@ import { Writer } from './components/writer/writer';
 import { BackgroundSelection } from './components/background-selection/background-selection';
 import { OptionsPanel } from './components/options-panel/options-panel';
 import { ExportPanel } from "./components/export-panel/export-panel";
+import { Header } from "./components/header/header";
 
 @Component({
   selector: 'app-root',
-  imports: [Writer, BackgroundSelection, OptionsPanel, ExportPanel],
+  imports: [Writer, BackgroundSelection, OptionsPanel, ExportPanel, Header],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
