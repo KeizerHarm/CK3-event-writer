@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import backgrounds from '../../../assets/backgrounds.json';
 import { BehaviorSubject, distinctUntilChanged, map, Observable, shareReplay } from 'rxjs';
 
@@ -14,6 +14,11 @@ export interface EventState {
   desc: string;
 
   options: string[];
+  leftCharacter: Character | null;
+  rightCharacter: Character | null;
+  lowerLeftCharacter: Character | null;
+  lowerCenterCharacter: Character | null;
+  lowerRightCharacter: Character | null;
 }
 
 export enum Tab {
@@ -21,10 +26,27 @@ export enum Tab {
   Characters
 }
 
+export interface Character {
+  id: number;
+  givenName: string;
+  familyName: string;
+  isFemale: boolean;
+  appelation: string;
+  title: string;
+  nickname: string;
+  portrait: PortraitOption | null;
+}
+
+export enum PortraitOption {
+  Haesteinn = 'Haesteinn',
+  Matilda = 'Matilda'
+}
+
 interface PersistentState {
   event: EventState;
   background: Background;
   noOfOptions: number;
+  characters: Character[];
 }
 interface VolatileState {
   tab: Tab;
@@ -46,11 +68,38 @@ export class StateService {
         title: '',
         desc: '',
         options: [
-          '','','','',''
-        ]
+          '', '', '', '', ''
+        ],
+        leftCharacter: null,
+        rightCharacter: null,
+        lowerLeftCharacter: null,
+        lowerCenterCharacter: null,
+        lowerRightCharacter: null
       },
       noOfOptions: 2,
-      background: backgrounds[0]
+      background: backgrounds[0],
+      characters: [
+        {
+          id: 1,
+          givenName: 'Haesteinn',
+          familyName: 'Haesteinning',
+          isFemale: false,
+          appelation: 'Jarl',
+          title: 'Nantes',
+          nickname: 'the Terrible',
+          portrait: PortraitOption.Haesteinn
+        },
+        {
+          id: 2,
+          givenName: 'Matilda',
+          familyName: 'di Canossa',
+          isFemale: true,
+          appelation: 'Duchess',
+          title: 'Tuscany',
+          nickname: '',
+          portrait: PortraitOption.Matilda
+        }
+      ]
     });
 
     this.background$ = this.persistentState$.pipe(
@@ -68,6 +117,11 @@ export class StateService {
       distinctUntilChanged(),
       shareReplay({ bufferSize: 1, refCount: true })
     );
+    this.characters$ = this.persistentState$.pipe(
+      map(state => state.characters),
+      distinctUntilChanged(),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
 
 
     const cache = localStorage.getItem('cache');
@@ -80,7 +134,7 @@ export class StateService {
     });
 
     this.volatileState$ = new BehaviorSubject<VolatileState>({
-      tab: Tab.Writer
+      tab: Tab.Characters
     });
     this.tab$ = this.volatileState$.pipe(
       map(state => state.tab),
@@ -96,8 +150,9 @@ export class StateService {
   updateEventState(state: Partial<EventState>) {
     const currentEvent = this.getCurrentEvent();
     this.persistentState$.next(
-      { ...this.persistentState$.value,
-         event: 
+      {
+        ...this.persistentState$.value,
+        event:
         {
           ...currentEvent,
           ...state
@@ -112,7 +167,7 @@ export class StateService {
   }
   setBackground(id: number) {
     const newBg = backgrounds.filter(x => x.id === id)[0];
-    this.persistentState$.next( { ...this.persistentState$.value, background: newBg } );
+    this.persistentState$.next({ ...this.persistentState$.value, background: newBg });
   }
 
   noOfOptions$: Observable<number>;
@@ -120,7 +175,7 @@ export class StateService {
     return this.persistentState$.value.noOfOptions;
   }
   setNoOfOptions(amount: number) {
-    this.persistentState$.next( { ...this.persistentState$.value, noOfOptions: amount } );
+    this.persistentState$.next({ ...this.persistentState$.value, noOfOptions: amount });
   }
 
   tab$: Observable<Tab>;
@@ -128,7 +183,15 @@ export class StateService {
     return this.volatileState$.value.tab;
   }
   setTab(tab: Tab) {
-    this.volatileState$.next( { ...this.volatileState$.value, tab } );
+    this.volatileState$.next({ ...this.volatileState$.value, tab });
+  }
+
+  characters$: Observable<Character[]>;
+  getCurrentCharacters(): Character[] {
+    return this.persistentState$.value.characters;
+  }
+  setCharacters(characters: Character[]) {
+    this.persistentState$.next({ ...this.persistentState$.value, characters });
   }
 
   clearAll() {
@@ -140,9 +203,36 @@ export class StateService {
         title: '',
         desc: '',
         options: [
-          '','','','',''
-        ]
-      }
+          '', '', '', '', ''
+        ],
+        leftCharacter: null,
+        rightCharacter: null,
+        lowerLeftCharacter: null,
+        lowerCenterCharacter: null,
+        lowerRightCharacter: null
+      },
+      characters: [
+        {
+          id: 1,
+          givenName: 'Haesteinn',
+          familyName: 'Haesteinning',
+          isFemale: false,
+          appelation: 'Jarl',
+          title: 'Nantes',
+          nickname: 'the Terrible',
+          portrait: PortraitOption.Haesteinn
+        },
+        {
+          id: 2,
+          givenName: 'Matilda',
+          familyName: 'di Canossa',
+          isFemale: true,
+          appelation: 'Duchess',
+          title: 'Tuscany',
+          nickname: '',
+          portrait: PortraitOption.Matilda
+        }
+      ]
     });
   }
 }

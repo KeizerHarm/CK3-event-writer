@@ -1,10 +1,62 @@
-<div>
+<div class="form subpanel">
+	{{ editingIndex === null ? 'Add character' : 'Update character' }}<br>
+	<form [formGroup]="form" (ngSubmit)="onSubmit()">
+		<svg person-icon></svg> Name:
+		<input type="text" formControlName="givenName" placeholder="Given name" />
+		<input type="text" formControlName="familyName" placeholder="Family name" />
+		<label>
+			Female
+			<input type="checkbox" formControlName="isFemale" />
+		</label>
+		<br>
+		<svg shield-icon></svg> Title: 
+		<input type="text" formControlName="appelation" placeholder="Appelation (e.g. Jarl)" />
+		 of 
+		<input type="text" formControlName="title" placeholder="Title (e.g. Tuscany)" />
+		
+		<br>
+		Nickname: <input type="text" formControlName="nickname" placeholder="Nickname" />
+		Portrait: 
+		<select formControlName="portrait">
+			@for (opt of portraitOptions; track $index) {
+				<option [ngValue]="opt">{{opt}}</option>
+			}
+		</select>
+		<br>
+		<button type="submit">
+			{{ editingIndex === null ? 'Add' : 'Update' }}
+		</button>
+
+		@if (editingIndex !== null) {
+			<button type="button" (click)="cancelEdit()">
+				Cancel
+			</button>
+		}
+
+	</form>
+</div>
+
+<div class="char-overview">
 	@for (char of characters; track char.id) {
+	<div class="subpanel char-panel">
+		<button class="btn-secondary action-btn" title="Delete character" (click)="deleteCharacter(char.id)">
+			<svg minus-icon></svg>
+		</button>
+		<button class="btn-secondary action-btn" title="Edit character" (click)="editCharacter(char.id)">
+			<svg edit-icon></svg>
+		</button>
 		<div>
-			<ul>
-				<li>Name: {{ printCharacterName(char) }}</li>
-				<li>Gender: {{ printCharacterGender(char) }}</li>
-			</ul>
+			<span class="char-name"> {{ printCharacterName(char) }} </span>
+			@if (char.isFemale) {
+			<svg class="char-gender" female-icon></svg>
+			}
+			@else {
+			<svg class="char-gender" male-icon></svg>
+			}
 		</div>
+		<div>
+			<span class="char-details">{{ printCharacterDetails(char) }}</span>
+		</div>
+	</div>
 	}
 </div>
